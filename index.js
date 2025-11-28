@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { initDB } from "./initDB.js";
 
 const app = express();
 
@@ -13,8 +14,15 @@ app.get("/health", (req, res) => {
 });
 
 // Запуск сервера
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Squid Game API running on http://localhost:${PORT}`);
-  console.log(`Database UI: http://localhost:8080`);
-});
+initDB()
+  .then(() => {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Squid Game API running on http://localhost:${PORT}`);
+      console.log(`Database UI: http://localhost:8080`);
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  });
