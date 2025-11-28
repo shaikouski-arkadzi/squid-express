@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { initDB } from "./initDB.js";
+import { router as gamesRouter } from "./routes/games.js";
 
 const app = express();
 
@@ -12,6 +13,9 @@ app.use(express.json()); // Парсим JSON в теле запросов
 app.get("/health", (req, res) => {
   res.json({ status: "OK", time: new Date() });
 });
+
+// Подключаем роуты
+app.use("/api/games", gamesRouter);
 
 // Запуск сервера
 initDB()
